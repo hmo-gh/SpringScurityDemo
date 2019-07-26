@@ -3,13 +3,14 @@ package com.example.springsecurity2.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sun.awt.image.ImageWatched;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 @Controller
@@ -23,9 +24,21 @@ public class UserController {
     @ResponseBody
     public ModelAndView login() {
         ModelAndView model = new ModelAndView();
+
         model.setViewName("login");
+
         return model;
     }
+
+//    @PostMapping("/login")
+//    @ResponseBody
+//    public Map<String, Object> helloLogin(@RequestBody JSONObj) {
+//        Map<String, Object> responseMap = new LinkedHashMap<>();
+//
+//
+//
+//        return responseMap;
+//    }
 
     @RequestMapping("/admin")
     @ResponseBody
