@@ -15,6 +15,9 @@ import javax.annotation.Resource;
 /*
  * Spring Security 配置类：
  * 重写它的方法来设置一些web安全的细节,如配置security的登录页面和传递的参数，公共路径权限属性等
+ *
+ * authentication-身份验证
+ * authority-权限
  */
 
 //标识该类是配置类
@@ -25,14 +28,14 @@ import javax.annotation.Resource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
-    private CustomUserDetailsService sysUserService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private SimpleAuthenticationSuccessHandler successHandler;
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth)throws Exception{
-        auth.userDetailsService(sysUserService).passwordEncoder(new PasswordEncoder() {
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(new PasswordEncoder() {
             @Override
             public String encode(CharSequence charSequence) {
                 return charSequence.toString();
@@ -65,10 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             break;
                         }
                     }
-                    System.out.println(auth.getName());
-                })
+                    System.out.println(auth.getName()); })
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .and().httpBasic() //http default error page
+//                .and().httpBasic() 
                 .and().exceptionHandling().accessDeniedPage("/denied")
                 .and().sessionManagement().invalidSessionUrl("/toLogin")
                 .and().csrf().disable();
