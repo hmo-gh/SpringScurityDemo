@@ -15,8 +15,9 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM
-        sys_user
+        user
         WHERE
         username = #{username, jdbcType=VARCHAR}
     </select>
+
 </mapper>

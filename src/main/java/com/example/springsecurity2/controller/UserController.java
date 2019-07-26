@@ -45,4 +45,12 @@ public class UserController {
         return model;
     }
 
+    @RequestMapping("/denied")
+    @ResponseBody
+    public ModelAndView deniedUser() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("denied");
+        return model;
+    }
+
 }

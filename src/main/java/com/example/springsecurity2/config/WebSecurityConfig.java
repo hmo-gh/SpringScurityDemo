@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -27,6 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService sysUserService;
 
     @Autowired
+    private SimpleAuthenticationSuccessHandler successHandler;
+
+    @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth)throws Exception{
         auth.userDetailsService(sysUserService).passwordEncoder(new PasswordEncoder() {
             @Override
@@ -45,15 +49,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .antMatchers( "/toLogin").permitAll()
                 .antMatchers("/user").hasRole("USER")
-                //.hasIpAddress()//读取配置权限配置
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin","/hello").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                //自定义登录界面
+//                .and().formLogin().successHandler(successHandler).failureUrl("/toLogin?error").permitAll()
                 .and().formLogin().loginPage("/toLogin").loginProcessingUrl("/login").failureUrl("/toLogin?error").permitAll()
+                .successHandler((req,res,auth)->{    //Success handler invoked after successful authentication
+                    for (GrantedAuthority authority : auth.getAuthorities()) {
+                        boolean hasUserRole = false;
+                        boolean hasAdminRole = false;
+                        System.out.println(authority.getAuthority());
+                        if (authority.getAuthority().equals("ROLE_USER")) {
+                            hasUserRole = true;
+                            res.sendRedirect("/user");
+                            break;
+                        } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                            hasAdminRole = true;
+                            res.sendRedirect("/admin");// Redirect user to index/home page
+                            break;
+                        }
+                    }
+                    System.out.println(auth.getName());
+                })
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .and().httpBasic()
+//                .and().httpBasic()
+                .and().exceptionHandling().accessDeniedPage("/denied")
                 .and().sessionManagement().invalidSessionUrl("/toLogin")
                 .and().csrf().disable();
         http.csrf().disable();

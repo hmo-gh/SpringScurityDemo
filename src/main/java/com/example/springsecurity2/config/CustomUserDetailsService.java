@@ -3,15 +3,15 @@ package com.example.springsecurity2.config;
 import com.example.springsecurity2.entity.po.User;
 import com.example.springsecurity2.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /*
@@ -31,28 +31,28 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        try{
+
+        try {
             User user = userMapper.findByUsername(username);
-            if(user == null){
+            if (user == null) {
                 throw new UsernameNotFoundException("User Not Found");
             }
             List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            if(StringUtils.isNotBlank(user.getRoles())){
+            if (StringUtils.isNotBlank(user.getRoles())) {
                 String[] roles = user.getRoles().split(",");
-                for(String role : roles){
-                    if(StringUtils.isNotBlank(role)){
+                for (String role : roles) {
+                    if (StringUtils.isNotBlank(role)) {
                         authorities.add(new SimpleGrantedAuthority(role.trim()));
                     }
                 }
+
             }
-            return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authorities);
-        }catch (Exception e) {
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
 
     }
-
-
 
 }
