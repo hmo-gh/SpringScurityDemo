@@ -52,19 +52,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").hasRole("USER")
                 .antMatchers("/admin","/hello").hasRole("ADMIN")
                 .anyRequest().authenticated()
-//                .and().formLogin().successHandler(successHandler).failureUrl("/toLogin?error").permitAll()
+//                .and().formLogin().successHandler(successHandler).failureUrl("/toLogin?error").permitAll() -- to access Http default login
                 .and().formLogin().loginPage("/toLogin").loginProcessingUrl("/login").failureUrl("/toLogin?error").permitAll()
                 .successHandler((req,res,auth)->{    //Success handler invoked after successful authentication
                     for (GrantedAuthority authority : auth.getAuthorities()) {
-                        boolean hasUserRole = false;
-                        boolean hasAdminRole = false;
                         System.out.println(authority.getAuthority());
                         if (authority.getAuthority().equals("ROLE_USER")) {
-                            hasUserRole = true;
                             res.sendRedirect("/user");
                             break;
                         } else if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                            hasAdminRole = true;
                             res.sendRedirect("/admin");// Redirect user to index/home page
                             break;
                         }
@@ -72,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     System.out.println(auth.getName());
                 })
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .and().httpBasic()
+//                .and().httpBasic() //http default error page
                 .and().exceptionHandling().accessDeniedPage("/denied")
                 .and().sessionManagement().invalidSessionUrl("/toLogin")
                 .and().csrf().disable();
