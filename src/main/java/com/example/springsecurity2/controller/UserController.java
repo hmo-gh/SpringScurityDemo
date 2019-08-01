@@ -1,69 +1,41 @@
 package com.example.springsecurity2.controller;
 
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import sun.awt.image.ImageWatched;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.springsecurity2.entity.po.Msg;
 
 
 @Controller
 public class UserController {
-    @GetMapping("hello")
-    public String hello(HttpServletRequest request, HttpServletResponse response){
-        return "hello";
+
+    @RequestMapping("/")
+    public String index(Model model){
+        Msg msg =  new Msg("HOME PAGE","","");
+        model.addAttribute("msg", msg);
+        return "home";
     }
 
-    @RequestMapping("/toLogin")
-    @ResponseBody
-    public ModelAndView login() {
-        ModelAndView model = new ModelAndView();
-
-        model.setViewName("login");
-
-        return model;
+    @RequestMapping("/login")
+    public String login(Model model){
+        Msg msg =  new Msg("LOGIN PAGE","WELCOME","");
+        model.addAttribute("msg", msg);
+        return "login";
     }
-
-//    @PostMapping("/login")
-//    @ResponseBody
-//    public Map<String, Object> helloLogin(@RequestBody JSONObj) {
-//        Map<String, Object> responseMap = new LinkedHashMap<>();
-//
-//
-//
-//        return responseMap;
-//    }
 
     @RequestMapping("/admin")
-    @ResponseBody
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView printAdmin() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("admin");
-        return model;
+    public String admin(Model model){
+        Msg msg =  new Msg("ADMIN PAGE","WELCOME","");
+        model.addAttribute("msg", msg);
+        return "home";
     }
 
     @RequestMapping("/user")
-    @ResponseBody
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ModelAndView printUser() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("user");
-        return model;
-    }
-
-    @RequestMapping("/denied")
-    @ResponseBody
-    public ModelAndView deniedUser() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("denied");
-        return model;
+    public String user(Model model){
+        Msg msg =  new Msg("USER PAGE","WELCOME","");
+        model.addAttribute("msg", msg);
+        return "home";
     }
 
 }

@@ -1,25 +1,12 @@
 package com.example.springsecurity2.entity.po;
+import java.util.List;
 
-import javax.persistence.Column;
-import java.io.Serializable;
-
-
-public class User implements Serializable {
-
+public class SysUser {
     private int id;
-
-    @Column(name = "username")
     private String username;
     private String password;
-    private String roles;
 
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
+    private List<SysRole> roles;
 
     public int getId() {
         return id;
@@ -44,5 +31,12 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-}
 
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
+    }
+}

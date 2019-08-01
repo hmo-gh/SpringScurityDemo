@@ -1,16 +1,61 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml%22%3E">
 <head>
-    <title>Spring Security Example</title>
+    <meta content="text/html;charset=UTF-8"/>
+    <title sec:authentication="name"></title>
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+        }
+        .starter-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome the home page!</h1>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <p class="navbar-brand">Spring Security Demo</p>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a th:href="@{/}"> HOME </a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
 
-<p>
-    Click <a th:href="@{/hello}">here</a> to login.
-</p>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1 th:text="${msg.title}"></h1>
+
+        <p class="bg-primary" th:text="${msg.content}"></p>
+
+        <div class="row" th:if="${#request.isUserInRole('ROLE_ADMIN')}">
+            <p class="bg-info" th:text="${msg.etraInfo}"></p>
+        </div>
+
+        <div class="row" th:if="${#request.isUserInRole('ROLE_ADMIN')}">
+            Click <a th:href="@{/admin}">here</a> to ADMIN page.<br>
+            Click <a th:href="@{/user}">here</a> to USER page.
+        </div>
+
+        <div class="row" th:if="${#request.isUserInRole('ROLE_USER')}">
+            <h2>This will only be displayed if authenticated user has role USER.</h2>
+            Click <a th:href="@{/user}">here</a> to USER page.
+        </div>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" class="btn btn-primary" value="LOGOUT"/>
+        </form>
+    </div>
+
+</div>
+
 </body>
 </html>
