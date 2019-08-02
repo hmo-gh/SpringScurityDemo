@@ -4,15 +4,8 @@
 <head>
     <meta content="text/html;charset=UTF-8"/>
     <title sec:authentication="name"></title>
-    <style type="text/css">
-        body {
-            padding-top: 50px;
-        }
-        .starter-template {
-            padding: 40px 15px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -41,8 +34,8 @@
         </div>
 
         <div class="row" th:if="${#request.isUserInRole('ROLE_ADMIN')}">
-            Click <a th:href="@{/admin}">here</a> to ADMIN page.<br>
-            Click <a th:href="@{/user}">here</a> to USER page.
+            <p>Click <a th:href="@{/admin}">here</a> to ADMIN page.</p><br>
+            <p>Click <a th:href="@{/user}">here</a> to USER page.</p>
         </div>
 
         <div class="row" th:if="${#request.isUserInRole('ROLE_USER')}">
